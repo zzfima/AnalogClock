@@ -9,6 +9,11 @@ namespace WindowsFormsApp2
         public Form1()
         {
             InitializeComponent();
+
+            //disable resizing
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -35,39 +40,38 @@ namespace WindowsFormsApp2
             int mins_arrow_length = 60;
             int hrs_arrow_length = 40;
 
-            //Draw frame
+            // Draw frame
             e.Graphics.DrawRectangle(Pens.Black, new Rectangle(new Point(0, 0), new Size(width, height)));
             e.Graphics.DrawEllipse(Pens.Black, new Rectangle(new Point(0, 0), new Size(width, height)));
 
-            //Draw numbers
+            // Draw numbers
             Font drawFont = new Font("Arial", 8);
             e.Graphics.DrawString("12", drawFont, Brushes.Red, new PointF(cx - 5, 2));
             e.Graphics.DrawString("6", drawFont, Brushes.Red, new PointF(cx - 5, height - 15));
             e.Graphics.DrawString("3", drawFont, Brushes.Red, new PointF(width - 10, cy - 5));
             e.Graphics.DrawString("9", drawFont, Brushes.Red, new PointF(5, cy - 5));
 
+            // Draw center circle
             var center = new Point(cx, cy);
             e.Graphics.DrawEllipse(Pens.Black, new Rectangle(new Point(cx - 3, cy - 3), new Size(6, 6)));
 
+            //Get current time
             DateTime dateTime = DateTime.Now;
             var secs = dateTime.Second;
             var mins = dateTime.Minute;
             var hrs = dateTime.Hour;
-            //draw time
-            e.Graphics.DrawString(dateTime.ToLongTimeString(), drawFont, Brushes.Black, new PointF(20, height + 50));
 
-            //Draw seconds pointer
+            // Draw seconds arrow
             int sec_degrees = secs * 360 / 60; //seconds value to degree
             e.Graphics.DrawLine(Pens.Red, center, DegreesToPoint(sec_degrees, sec_arrow_length, center));
 
-
-            //Draw minutes pointer
+            // Draw minutes arrow
             int min_degrees = mins * 360 / 60; //minutes value to degree
-            e.Graphics.DrawLine(Pens.Black, center, DegreesToPoint(min_degrees, mins_arrow_length, center));
+            e.Graphics.DrawLine(new Pen(Color.Black, 2f), center, DegreesToPoint(min_degrees, mins_arrow_length, center));
 
-            //Draw hours pointer
+            // Draw hours arrow
             double hrs_degrees = hrs % 12 * 30 + mins * 0.5; //hours value to degree
-            e.Graphics.DrawLine(Pens.Black, center, DegreesToPoint(hrs_degrees, hrs_arrow_length, center));
+            e.Graphics.DrawLine(new Pen(Color.Black, 3f), center, DegreesToPoint(hrs_degrees, hrs_arrow_length, center));
         }
 
         private Point DegreesToPoint(double degrees, int length, Point center)
